@@ -1,0 +1,5 @@
+circle:
+./nbody 1.0 100 -10.0 0.05 5.0 1e-7 1000 200 circle 0
+
+square lattice:
+./nbody 1.0 1024 0.05 5.0 1e-7 1000 200 square_lattice 1e3

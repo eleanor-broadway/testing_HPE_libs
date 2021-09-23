@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Slurm job options (job-name, compute nodes, job time)
-#SBATCH --job-name=fftw
+#SBATCH --job-name=netcdf-hdf-parallel
 #SBATCH --time=0:20:0
 #SBATCH --nodes=1
 #SBATCH --tasks-per-node=128
@@ -15,7 +15,9 @@
 # Setup the job environment (this module needs to be loaded before any other modules)
 module load epcc-job-env
 
+cat $0
+
 export OMP_NUM_THREADS=1
 
-ldd fftw.x
-srun --distribution=block:block --hint=nomultithread ./fftw.x
+ldd benchio.x
+srun --distribution=block:block --hint=nomultithread ./benchio.x

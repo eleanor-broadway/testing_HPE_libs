@@ -1,0 +1,51 @@
+#!/bin/sh
+# Copyright (C) 2015 Institute for Theoretical Physics, ETH Zurich
+#               2015-2015 by Michele Dolfi <dolfim@phys.ethz.ch>
+
+# Bind an hybrid job to different CPU ids
+# It makes use of MVAPICH2 and LSB environment variables to determine the availbale resources.
+# Example job:
+# export MV2_ENABLE_AFFINITY=0
+# OMP_NUM_THREADS=2 bsub -n 8 -W 0:02 -R 'span[ptile=4]' -o test_mpi.log mpirun -np 4 -ppn 2 ./myrun ./a.out
+# This will run 4 MPI processes with 2 threads each (a total of 8 cpus). The request asks for 2 MPI processes per node (-ppn 2), which
+# means 4 cpus on each node (ptile=4).
+
+if [ -z "$MV2_COMM_WORLD_LOCAL_RANK" ]; then
+    echo "MV2_COMM_WORLD_LOCAL_RANK is not set. Did you submit with mpirun?"
+    exit 1
+fi
+if [ -z "$MPIR_CVAR_CH3_INTERFACE_HOSTNAME" ]; then
+    echo "MPIR_CVAR_CH3_INTERFACE_HOSTNAME is not set. Did you submit with mpirun?"
+    exit 1
+fi
+if [ -z "$LSB_AFFINITY_HOSTFILE" ]; then
+    echo "LSB_AFFINITY_HOSTFILE is not set. This environment variable should be set by the scheduling system."
+    exit 1
+fi
+if [ -z "$THREADS_PER_PROC" ]; then
+    if [ -n "$OMP_NUM_THREADS" ]; then
+        THREADS_PER_PROC=$OMP_NUM_THREADS
+    else
+        echo "THREADS_PER_PROC is not set. This environment variable is required."
+        exit 1
+    fi
+fi
+
+IFS=$'\r\n' GLOBIGNORE='*' :; ALLCPUS=($(grep "$MPIR_CVAR_CH3_INTERFACE_HOSTNAME"  $LSB_AFFINITY_HOSTFILE | awk '{print $2}'))
+
+function join { local IFS="$1"; shift; echo "$*"; }
+
+
+mystart=$(($THREADS_PER_PROC * $MV2_COMM_WORLD_LOCAL_RANK))
+myend=$(($mystart + $THREADS_PER_PROC))
+
+mycpu=("${ALLCPUS[@]:mystart:myend}")
+mybind=$(join , "${mycpu[@]}")
+
+## Debugging
+#echo "[$MV2_COMM_WORLD_RANK, $MPIR_CVAR_CH3_INTERFACE_HOSTNAME] all: ${ALLCPUS[@]}, $LSB_BIND_CPU_LIST"
+#echo "[$MV2_COMM_WORLD_RANK, $MPIR_CVAR_CH3_INTERFACE_HOSTNAME] local=$MV2_COMM_WORLD_LOCAL_RANK, start=$mystart, end=$myend : mycpu ${mycpu[@]} : mybind $mybind"
+
+
+numactl --physcpubind=$mybind "$@"
+
