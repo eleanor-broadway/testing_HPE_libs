@@ -4,7 +4,7 @@
 #SBATCH --job-name=scalapack
 #SBATCH --time=0:20:0
 #SBATCH --nodes=1
-#SBATCH --tasks-per-node=128
+#SBATCH --tasks-per-node=10
 #SBATCH --cpus-per-task=1
 
 # Replace [budget code] below with your budget code (e.g. t01)
@@ -13,8 +13,8 @@
 #SBATCH --qos=standard
 
 # Setup the job environment (this module needs to be loaded before any other modules)
-module load epcc-job-env
-module -s restore /etc/cray-pe.d/PrgEnv-gnu
+# module load epcc-job-env
+# module -s restore /etc/cray-pe.d/PrgEnv-gnu
 
 cat $0
 

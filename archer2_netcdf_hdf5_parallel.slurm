@@ -13,7 +13,7 @@
 #SBATCH --qos=standard
 
 # Setup the job environment (this module needs to be loaded before any other modules)
-module load epcc-job-env
+# module load epcc-job-env
 
 cat $0
 

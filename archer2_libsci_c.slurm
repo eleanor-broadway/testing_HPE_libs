@@ -13,8 +13,8 @@
 #SBATCH --qos=standard
 
 # Setup the job environment (this module needs to be loaded before any other modules)
-module load epcc-job-env
-module -s restore /etc/cray-pe.d/PrgEnv-gnu
+# module load epcc-job-env
+# module -s restore /etc/cray-pe.d/PrgEnv-gnu
 
 
 cat $0
