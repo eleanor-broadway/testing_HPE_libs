@@ -75,7 +75,7 @@ program main
     call SGESV(2,1,A,2,pivot,B,2,ok)
     print*, " "
 
-    print*, "Correct answer: 2, 4"
+    print*, "Correct answer: 1.57894742,  0.736842036"
     print*, "Answer:", B(:)
     print*, " "
     print*, "DONE"

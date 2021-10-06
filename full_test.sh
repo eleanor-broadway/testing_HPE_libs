@@ -11,9 +11,6 @@ cd $PRFX
 git clone https://github.com/EPCCed/benchio.git
 git clone https://github.com/undees/fftw-example.git
 
-mv archer2_netcdf_hdf5_parallel.slurm $PRFX/benchio/shared-file/source
-mv archer2_fftw.slurm $PRFX/fftw-example
-
 ##############################################
 # Serial NetCDF and HDF5
 ##############################################
@@ -29,6 +26,9 @@ module unload cray-hdf5
 ##############################################
 # Parallel NetCDF and HDF5
 ##############################################
+
+mv $PRFX/archer2_netcdf_hdf5_parallel.slurm $PRFX/benchio/shared-file/source
+
 module load cray-hdf5-parallel
 module load cray-netcdf-hdf5parallel
 
@@ -48,6 +48,9 @@ module unload cray-netcdf-hdf5parallel
 ##############################################
 # FFTW
 ##############################################
+
+mv $PRFX/archer2_fftw.slurm $PRFX/fftw-example
+
 module load cray-fftw
 
 cd $PRFX/fftw-example
@@ -63,5 +66,10 @@ module unload cray-fftw
 # cray-libsci is loaded by default
 
 cd $PRFX
-ftn blas_lapack_test.f90 -o blas_lapack.x
+ftn blas_lapack_test.f90 -o libsci.x
 sbatch archer2_libsci.slurm
+
+cp $PRFX/archer2_libsci.slurm $PRFX/GitLab-examples-MT/examples/mpi
+cd $PRFX/GitLab-examples-MT/examples/mpi
+CC scalapack.cpp -o libsci.x
+sbatch archer2_scalapack_cblas.slurm
