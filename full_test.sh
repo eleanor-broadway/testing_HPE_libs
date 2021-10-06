@@ -14,14 +14,14 @@ git clone https://github.com/undees/fftw-example.git
 ##############################################
 # Serial NetCDF and HDF5
 ##############################################
-module load cray-hdf5
-
-cd $PRFX
-CC simple_hdf5.cpp -o hdf5.x
-
-sbatch archer2_hdf5.slurm
-
-module unload cray-hdf5
+# module load cray-hdf5
+#
+# cd $PRFX
+# CC simple_hdf5.cpp -o hdf5.x
+#
+# sbatch archer2_hdf5.slurm
+#
+# module unload cray-hdf5
 
 ##############################################
 # Parallel NetCDF and HDF5
@@ -66,8 +66,12 @@ module unload cray-fftw
 # cray-libsci is loaded by default
 
 cd $PRFX
-ftn blas_lapack_test.f90 -o blas.x
-sbatch archer2_blas.slurm
+ftn blas_lapack_test.f90 -o libsci_f90.x
+sbatch archer2_libsci_f90.slurm
+
+cd $PRFX
+cc cblas_lapacke_test.c -o libsci_c.x
+sbatch archer2_libsci_c.slurm
 
 cp $PRFX/archer2_scalapack.slurm $PRFX/GitLab-examples-MT/examples/mpi
 cd $PRFX/GitLab-examples-MT/examples/mpi
@@ -83,8 +87,9 @@ sbatch archer2_scalapack.slurm
 ##############################################
 
 cd $PRFX
-# ftn blas_lapack_test.f90 -o libsci.x (archer2_libsci.slurm)
-# CC simple_hdf5.cpp -o hdf5.x (archer2_hdf5.slurm)
+# ftn blas_lapack_test.f90 -o libsci.x (archer2_libsci_f90.slurm)
+# ftn cblas_lapacke_test.c -o libsci.x (archer2_libsci_c.slurm)
+############### CC simple_hdf5.cpp -o hdf5.x (archer2_hdf5.slurm)
 
 cd $PRFX/benchio/shared-file/source
 # benchio (archer2_netcdf_hdf5_parallel.slurm)
