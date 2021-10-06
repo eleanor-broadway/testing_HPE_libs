@@ -66,13 +66,15 @@ module unload cray-fftw
 # cray-libsci is loaded by default
 
 cd $PRFX
-ftn blas_lapack_test.f90 -o libsci.x
-sbatch archer2_libsci.slurm
+ftn blas_lapack_test.f90 -o blas.x
+sbatch archer2_blas.slurm
 
-cp $PRFX/archer2_libsci.slurm $PRFX/GitLab-examples-MT/examples/mpi
+cp $PRFX/archer2_scalapack.slurm $PRFX/GitLab-examples-MT/examples/mpi
 cd $PRFX/GitLab-examples-MT/examples/mpi
-CC scalapack.cpp -o libsci.x
-sbatch archer2_libsci.slurm
+CC scalapack.cpp -o scalapack.x
+
+# !!!! THIS SCRIPT MUST BE CHANGED FOR THE PROGRAMMING ENVIRONMENT
+sbatch archer2_scalapack.slurm
 
 
 
@@ -91,4 +93,4 @@ cd $PRFX/fftw-example
 # cc fftw_example.c -o fftw.x (archer2_fftw.slurm)
 
 cd $PRFX/GitLab-examples-MT/examples/mpi
-# CC scalapack.cpp -o libsci.x (archer2_libsci.slurm) 
+# CC scalapack.cpp -o libsci.x (archer2_libsci.slurm)

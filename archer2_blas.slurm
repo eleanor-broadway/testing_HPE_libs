@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Slurm job options (job-name, compute nodes, job time)
-#SBATCH --job-name=libsci
+#SBATCH --job-name=blas
 #SBATCH --time=0:20:0
 #SBATCH --nodes=1
 #SBATCH --tasks-per-node=1
@@ -19,5 +19,5 @@ cat $0
 
 export OMP_NUM_THREADS=1
 
-ldd blas_lapack.x
-srun --distribution=block:block --hint=nomultithread ./libsci.x
+ldd blas.x
+srun --distribution=block:block --hint=nomultithread ./blas.x
