@@ -51,7 +51,7 @@ int main(void)
     delete dataset;
     delete file;
 
-    cout << "HDF5 serial FINISHED";
+    std::cout << "HDF5 serial FINISHED";
 
     return 0;
 }

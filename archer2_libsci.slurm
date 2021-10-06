@@ -20,4 +20,4 @@ cat $0
 export OMP_NUM_THREADS=1
 
 ldd blas_lapack.x
-srun --distribution=block:block --hint=nomultithread ./blas_lapack.x
+srun --distribution=block:block --hint=nomultithread ./libsci.x

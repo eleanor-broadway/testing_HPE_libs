@@ -5,7 +5,7 @@ module restore PrgEnv-gnu
 ##############################################
 # Set up
 ##############################################
-PRFX=/work/z19/z19/eleanorb/testing_HPE
+PRFX=/work/z19/z19/eleanorb/test_again_lol/testing_HPE_libs
 cd $PRFX
 
 git clone https://github.com/EPCCed/benchio.git
@@ -54,7 +54,7 @@ mv $PRFX/archer2_fftw.slurm $PRFX/fftw-example
 module load cray-fftw
 
 cd $PRFX/fftw-example
-CC fftw_example.c -o fftw.x
+cc fftw_example.c -o fftw.x
 sbatch archer2_fftw.slurm
 
 module unload cray-fftw
@@ -72,4 +72,23 @@ sbatch archer2_libsci.slurm
 cp $PRFX/archer2_libsci.slurm $PRFX/GitLab-examples-MT/examples/mpi
 cd $PRFX/GitLab-examples-MT/examples/mpi
 CC scalapack.cpp -o libsci.x
-sbatch archer2_scalapack_cblas.slurm
+sbatch archer2_libsci.slurm
+
+
+
+##############################################
+# Checking the slurm scripts
+##############################################
+
+cd $PRFX
+# ftn blas_lapack_test.f90 -o libsci.x (archer2_libsci.slurm)
+# CC simple_hdf5.cpp -o hdf5.x (archer2_hdf5.slurm)
+
+cd $PRFX/benchio/shared-file/source
+# benchio (archer2_netcdf_hdf5_parallel.slurm)
+
+cd $PRFX/fftw-example
+# cc fftw_example.c -o fftw.x (archer2_fftw.slurm)
+
+cd $PRFX/GitLab-examples-MT/examples/mpi
+# CC scalapack.cpp -o libsci.x (archer2_libsci.slurm) 
